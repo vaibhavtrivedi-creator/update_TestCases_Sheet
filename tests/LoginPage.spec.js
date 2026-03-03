@@ -55,16 +55,19 @@ test.describe('Login Functionality Tests', () => {
                     case 'LGN_01':
                         await loginPage.goToLoginPage();
                         await loginPage.loginWithValidCredentials('vaibhav.esprit@gmail.com', 'Vibhu@990');
-                        actual_Result = loginPage.page.url();
-                        expect(actual_Result).toBe('https://rahulshettyacademy.com/client/#/dashboard');
+                        await page.waitForURL('https://rahulshettyacademy.com/client/#/dashboard/dash');
+                        actual_Result = await page.url();
+                        console.log('Actual URL after login:', actual_Result);
+                        expect(actual_Result).toBe('https://rahulshettyacademy.com/client/#/dashboard/dash');
                         status = 'Pass';
                         break;
 
                     case 'LGN_02':
                         await loginPage.goToLoginPage();
                         await loginPage.loginByPressingEnter('vaibhav.esprit@gmail.com', 'Vibhu@990');
-                        actual_Result = loginPage.page.url();
-                        expect(actual_Result).toBe('https://rahulshettyacademy.com/client/#/dashboard');
+                        await page.waitForURL('https://rahulshettyacademy.com/client/#/dashboard/dash');
+                        actual_Result = await page.url();
+                        expect(actual_Result).toBe('https://rahulshettyacademy.com/client/#/dashboard/dash');
                         status = 'Pass';
                         break;
 
@@ -77,13 +80,15 @@ test.describe('Login Functionality Tests', () => {
 
                     case 'LGN_04':
                         await loginPage.goToLoginPage();
-                        await loginPage.enterValidUsername('vaibhav.esprit@gmail.com');
+                        const name1 = await loginPage.enterValidUsername('vaibhav.esprit@gmail.com');
+                        expect(name1).toBe('vaibhav.esprit@gmail.com');
                         status = 'Pass';
                         break;
 
                     case 'LGN_05':
                         await loginPage.goToLoginPage();
-                        await loginPage.enterValidPassword('Vibhu@990');
+                        const passwordValue = await loginPage.enterValidPassword('Vibhu@990');
+                        expect(passwordValue).toBe('Vibhu@990');
                         status = 'Pass';
                         break;
 
@@ -114,7 +119,7 @@ test.describe('Login Functionality Tests', () => {
                     case 'LGN_09':
                         await loginPage.goToLoginPage();
                         await loginPage.empty_Username_And_Password();
-                        actual_Result = await page.locator('.ng-star-inserted').textContent();
+                        actual_Result = await page.locator('.invalid-feedback').first().textContent();
                         expect(actual_Result).toBe('*Email is required');
                         status = 'Pass';
                         break;
@@ -122,7 +127,7 @@ test.describe('Login Functionality Tests', () => {
                     case 'LGN_10':
                         await loginPage.goToLoginPage();
                         await loginPage.empty_Username('Vibhu@990');
-                        actual_Result = await page.locator('.ng-star-inserted').textContent();
+                        actual_Result = await page.locator('.invalid-feedback').textContent();
                         expect(actual_Result).toBe('*Email is required');
                         status = 'Pass';
                         break;
@@ -130,7 +135,7 @@ test.describe('Login Functionality Tests', () => {
                     case 'LGN_11':
                         await loginPage.goToLoginPage();
                         await loginPage.empty_Password('vaibhav.esprit@gmail.com');
-                        actual_Result = await page.locator('.ng-star-inserted').textContent();
+                        actual_Result = await page.locator('.invalid-feedback').textContent();
                         expect(actual_Result).toBe('*Password is required');
                         status = 'Pass';
                         break;
